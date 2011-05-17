@@ -1,5 +1,6 @@
 require 'gosu'
 require 'texplay'
+require 'activesupport'
 
 class Building
   
@@ -93,12 +94,24 @@ class GameWindow < Gosu::Window
                 Point3d.new(-1,-1,1)
             ]
     @faces = [[0,1,2,3],[1,5,6,2],[5,4,7,6],[4,0,3,7],[0,4,5,1],[3,2,6,7]]
+    @queue = []
   end
 
   def update
+    if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
+      p "lewo!"
+      @queue << "rotX"
+    end
+    if button_down? Gosu::KbRight or button_down? Gosu::GpRight then
+      @queue << "rotY"
+    end
+    if button_down? Gosu::KbUp or button_down? Gosu::GpButton0 then
+      @queue << "rotZ"
+    end
   end
 
   def draw
+        @image = TexPlay.create_image(self, 640, 480, :color => Gosu::Color::BLUE) 
  #   @building = Building.new([{:x => 0, :y => 0, :z => 0}, {:x => 100, :y => 0, :z => 0},{:x => 0, :y => 100, :z => 0},{:x => 100, :y => 100, :z => 0},
 #      {:x => 0, :y => 0, :z => 100}, {:x => 100, :y => 0, :z => 100},{:x => 0, :y => 100, :z => 100},{:x => 100, :y => 100, :z => 100}])
   #  8.times do |n|
@@ -115,16 +128,42 @@ class GameWindow < Gosu::Window
       #  line @projection7[:x], @projection7[:x], @projection0[:x], @projection0[:y]
   #  }
   t = []
-
-  @vertices.each do |v|
-    # Rotate the point around X axis, then around Y axis, and finally around Z axis.
-  #  r = v.rotateX(self.angleX).rotateY(self.angleY).rotateZ(self.angleZ)
-    # Transform the point from 3D to 2D
-    p = v.project(640, 480, 256, 4)
-    # Put the point in the list of transformed vertices
-    t << p
+  if @queue.blank?
+    @vertices.each do |v|
+      # Rotate the point around X axis, then around Y axis, and finally around Z axis.
+      #  r = v.rotateX(self.angleX).rotateY(self.angleY).rotateZ(self.angleZ)
+      # Transform the point from 3D to 2D
+      p = v.project(640, 480, 256, 4)
+      # Put the point in the list of transformed vertices
+      t << p
+    end
+  else
+    transform = @vertices
+    @queue.each do |q|
+      tr = []
+      if q == "rotX"
+        transform.each do |v|
+          tr << v.rotateX(10)
+        end
+      elsif q == "rotY"
+        transform.each do |v|
+          tr << v.rotateY(10)
+        end
+        
+      elsif q == "rotZ"
+        transform.each do |v|
+          tr << v.rotateZ(10)
+        end    
+      end
+      transform = tr
+    end
+    transform.each do |v|
+      p = v.project(640, 480, 256, 4)
+      t << p
+    end
+    @vertices = transform
   end
-
+    @queue = []
     @faces.each do |f|
       @image.paint {
         line t[f[0]].x, t[f[0]].y, t[f[1]].x, t[f[1]].y
