@@ -1,0 +1,6 @@
+Simple 3d drawing piece of code. Written in Ruby using Gosu, Texplay and Active Support.
+
+Very much of the code is taken from:
+http://codentronix.com/2011/04/21/rotating-3d-wireframe-cube-with-python/
+
+Maybe someone will make some use of it :)
