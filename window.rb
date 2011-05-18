@@ -1,36 +1,8 @@
 require 'gosu'
 require 'texplay'
-require 'activesupport'
-
-class Building
-  
-  attr_accessor :points
-  
-  def initialize(points)
-    @points = points
-    @d = 200
-  end
-  
-  def projection(hash)
-    x0 = hash[:x]
-    y0 = hash[:y]
-    z0 = hash[:z]
-    if (z0 + @d > 0)
-      x = (x0 * @d) / (z0 + @d);
-      y = (y0 * @d) / (z0 + @d);    
-    end
-    {:x => x0, :y => y0}
-  end
-  
-  def paint_self(image)
-    
-  end
-  
-end
-
+require 'active_support'
 
 class Point3d
-
     attr_accessor :x, :y, :z
     
     def initialize(x = 0, y = 0, z = 0)
@@ -40,7 +12,6 @@ class Point3d
     end
 
     def rotateX(angle)
-   #   """ Rotates the point around the X axis by the given angle in degrees. """
       rad = angle * Math::PI / 180
       cosa = Math::cos(rad)
       sina = Math::sin(rad)
@@ -50,7 +21,6 @@ class Point3d
     end
 
     def rotateY(angle)
-   #   """ Rotates the point around the Y axis by the given angle in degrees. """
       rad = angle * Math::PI / 180
       cosa = Math::cos(rad)
       sina = Math::sin(rad)
@@ -60,7 +30,6 @@ class Point3d
     end
 
     def rotateZ(angle)
-    #  """ Rotates the point around the Z axis by the given angle in degrees. """
       rad = angle * Math::PI / 180
       cosa = Math::cos(rad)
       sina = Math::sin(rad)
@@ -70,10 +39,10 @@ class Point3d
     end
 
     def project(win_width, win_height, fov, viewer_distance)
-   #   """ Transforms this 3D point to 2D using a perspective projection. """
       factor = fov / (viewer_distance + @z)
       x = @x * factor + win_width / 2
       y = -@y * factor + win_height / 2
+      return nil if @z > 9.99999999999
       return Point3d.new(x, y, 1)
     end
 end
@@ -83,76 +52,107 @@ class GameWindow < Gosu::Window
     super 640, 480, false
     self.caption = "Projekt Grafika 2"
     @image = TexPlay.create_image(self, 640, 480, :color => Gosu::Color::BLUE) 
-    @vertices = [
+    @vertices =
+    [
       #pierwsza kostka
-                Point3d.new(-1,1,-1), #0
-                Point3d.new(1,1,-1), #1
-                Point3d.new(1,-1,-1), #2
-                Point3d.new(-1,-1,-1), #3
-                Point3d.new(-1,1,1), #4
-                Point3d.new(1,1,1), #5
-                Point3d.new(1,-1,1), #6
-                Point3d.new(-1,-1,1), #7
+                Point3d.new(11.987708,-1.000000,1.000000),
+                Point3d.new(11.987708,-1.000000,3.000000),
+                Point3d.new(9.243792,-1.000000,3.000000),
+                Point3d.new(9.243793,-1.000000,1.000000),
+                Point3d.new(11.987709,1.000000,1.000000),
+                Point3d.new(11.987707,1.000000,3.000000),
+                Point3d.new(9.243792,1.000000,3.000000),
+                Point3d.new(9.243793,1.000000,1.000000),
       #druga kostka
-                Point3d.new(-2,2,-2), #8
-                Point3d.new(2,2,-2), #9
-                Point3d.new(2,-2,-2), #10
-                Point3d.new(-2,-2,-2), #11
-                Point3d.new(-2,2,2), #12
-                Point3d.new(2,2,2), #13
-                Point3d.new(2,-2,2), #14
-                Point3d.new(-2,-2,2) #15
-            ]
-    @faces = [
-      #pierwsza kostka
-      [0,1,2,3],[1,5,6,2],[5,4,7,6],[4,0,3,7],[0,4,5,1],[3,2,6,7],
-      #druga kostka
-    #  [8,9,11,12] ,[9,13,14,10],[13,12,11,10],[12,8,11,15],[8,12,13,9],[11,10,14,15]
+                Point3d.new(-2.956952,-0.000000,-7.195473),
+                Point3d.new(-2.956952,-0.000000,-5.195473),
+                Point3d.new(3.043049,-0.000000,-5.195473), 
+                Point3d.new(3.043047,-0.000000,-7.195474), 
+                Point3d.new(-2.956953,2.000000,-7.195473), 
+                Point3d.new(-2.956950,2.000000,-5.195473), 
+                Point3d.new(3.043049,2.000000,-5.195474),
+                Point3d.new(3.043048,2.000000,-7.195473),
+        #trzecia kostka
+                Point3d.new(4.600000,-1.600000,3.400000),
+                Point3d.new(4.600000,-1.600000,6.600000),
+                Point3d.new(1.400000,-1.600000,6.600000),
+                Point3d.new(1.400001,-1.600000,3.400000),
+                Point3d.new(4.600001,1.600000,3.400001),
+                Point3d.new(4.599999,1.600000,6.600001),
+                Point3d.new(1.399999,1.600000,6.599999),
+                Point3d.new(1.400000,1.600000,3.400000),
+          #czwarta kostka
+              Point3d.new(7.987709,-1.000000,-5.000000),
+              Point3d.new(7.987709,-1.000000,-3.000000),
+              Point3d.new(5.243792,-1.000000,-3.000000),
+              Point3d.new(5.243793,-1.000000,-5.000000),
+              Point3d.new(7.987709,1.000000,-5.000000),
+              Point3d.new(7.987708,1.000000,-3.000000),
+              Point3d.new(5.243792,1.000000,-3.000000),
+              Point3d.new(5.243793,1.000000,-5.000000),
+          #piąta kostka
+              Point3d.new(-3.000000,-1.000000,-1.000000),
+              Point3d.new(-3.000000,-1.000000,1.000000),
+              Point3d.new(3.000000,-1.000000,1.000000),
+              Point3d.new(2.999999,-1.000000,-1.000000),
+              Point3d.new(-3.000001,1.000000,-1.000000),
+              Point3d.new(-2.999998,1.000000,1.000001),
+              Point3d.new(3.000001,1.000000,1.000000),
+              Point3d.new(3.000000,1.000000,-1.000000)
     ]
-    @distance = 4
+    @faces =
+      [
+      [0, 1, 2, 3], [4, 7, 6, 5], [0, 4, 5, 1], [1, 5, 6, 2], [2, 6, 7, 3], [4, 0, 3, 7],
+      [8, 9, 10, 11], [12, 15, 14, 13], [8, 12, 13, 9], [9, 13, 14, 10], [10, 14, 15, 11], [12, 8, 11, 15],
+      [16, 17, 18, 19], [20, 23, 22, 21], [16, 20, 21, 17], [17, 21, 22, 18], [18, 22, 23, 19], [20, 16, 19, 23],
+      [24, 25, 26, 27], [28, 31, 30, 29], [24, 28, 29, 25], [25, 29, 30, 26], [26, 30, 31, 27], [28, 24, 27, 31],
+      [32, 33, 34, 35], [36, 39, 38, 37], [32, 36, 37, 33], [33, 37, 38, 34], [34, 38, 39, 35], [36, 32, 35, 39]
+      ]
+    @distance = -10
+   #@colors = [[255,0,255],(255,0,0),(0,255,0),(0,0,255),(0,255,255),(255,255,0)]
   end
 
   def update
     if button_down? Gosu::KbE then
       @vertices = @vertices.map do |v|
-        v.rotateX(10)
+        v.rotateX(1)
       end
     end
     if button_down? Gosu::KbD then
       @vertices = @vertices.map do |v|
-        v.rotateX(-10)
+        v.rotateX(-1)
       end
     end
     if button_down? Gosu::KbQ then
       @vertices = @vertices.map do |v|
-        v.rotateY(10)
+        v.rotateY(1)
       end
     end
     if button_down? Gosu::KbW then
       @vertices = @vertices.map do |v|
-        v.rotateY(-10)
+        v.rotateY(-1)
       end
     end 
     if button_down? Gosu::KbC then
       @vertices = @vertices.map do |v|
-        v.rotateZ(10)
+        v.rotateZ(1)
       end
     end
     if button_down? Gosu::KbV then
       @vertices = @vertices.map do |v|
-        v.rotateZ(-10)
+        v.rotateZ(-1)
       end
     end
     if button_down? Gosu::KbUp then
       @vertices = @vertices.map do |v|
-        Point3d.new(v.x, v.y+0.1, v.z)
+          Point3d.new(v.x, v.y, v.z+0.1)
       end
     end
     if button_down? Gosu::KbDown then
-    #  @distance -= 0.1
-    @vertices = @vertices.map do |v|
-      Point3d.new(v.x, v.y-0.1, v.z)
-    end
+      @vertices = @vertices.map do |v|
+        Point3d.new(v.x, v.y, v.z-0.1)
+      end
+
     end
     if button_down? Gosu::KbLeft then
       @vertices = @vertices.map do |v|
@@ -165,16 +165,14 @@ class GameWindow < Gosu::Window
       end
     end
     if button_down? Gosu::KbO then
-    @vertices = @vertices.map do |v|
-        Point3d.new(v.x, v.y, v.z-0.1)
-    end
-    #@distance -= 0.1
+      @vertices = @vertices.map do |v|
+        Point3d.new(v.x, v.y+0.1, v.z)
+      end
     end
     if button_down? Gosu::KbL then
-    @vertices = @vertices.map do |v|
-      Point3d.new(v.x, v.y, v.z+0.1)
-    end
-    #@distance += 0.1
+      @vertices = @vertices.map do |v|
+        Point3d.new(v.x, v.y-0.1, v.z)
+      end
     end
     if button_down? Gosu::KbEscape then
       close
@@ -182,42 +180,53 @@ class GameWindow < Gosu::Window
   end
 
   def draw
-        @image = TexPlay.create_image(self, 640, 480, :color => Gosu::Color::BLUE) 
- #   @building = Building.new([{:x => 0, :y => 0, :z => 0}, {:x => 100, :y => 0, :z => 0},{:x => 0, :y => 100, :z => 0},{:x => 100, :y => 100, :z => 0},
-#      {:x => 0, :y => 0, :z => 100}, {:x => 100, :y => 0, :z => 100},{:x => 0, :y => 100, :z => 100},{:x => 100, :y => 100, :z => 100}])
-  #  8.times do |n|
- #     eval("@projection#{n} = @building.projection(@building.points[#{n}])")
-#    end
-#    @image.paint {
- #       line @projection0[:x], @projection0[:x], @projection1[:x], @projection1[:y]
- #      line @projection1[:x], @projection1[:x], @projection2[:x], @projection2[:y]
-  #      line @projection2[:x], @projection2[:x], @projection3[:x], @projection3[:y]
-   #     line @projection3[:x], @projection3[:x], @projection4[:x], @projection4[:y]
-    #    line @projection4[:x], @projection4[:x], @projection5[:x], @projection5[:y]
-     #   line @projection5[:x], @projection5[:x], @projection6[:x], @projection6[:y]
-      #  line @projection6[:x], @projection6[:x], @projection7[:x], @projection7[:y]
-      #  line @projection7[:x], @projection7[:x], @projection0[:x], @projection0[:y]
-  #  }
-  t = []
-  @vertices.each do |v|
-      # Rotate the point around X axis, then around Y axis, and finally around Z axis.
-      #  r = v.rotateX(self.angleX).rotateY(self.angleY).rotateZ(self.angleZ)
-      # Transform the point from 3D to 2D
-    p = v.project(640, 480, 256, @distance)
-      # Put the point in the list of transformed vertices
-    t << p
-  end
-    @faces.each do |f|
-      @image.paint {
-        line t[f[0]].x, t[f[0]].y, t[f[1]].x, t[f[1]].y
-        line t[f[1]].x, t[f[1]].y, t[f[2]].x, t[f[2]].y
-        line t[f[2]].x, t[f[2]].y, t[f[3]].x, t[f[3]].y
-        line t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y
-      }
+    @image = TexPlay.create_image(self, 640, 480, :color => Gosu::Color::BLUE) 
+    t = []
+    @vertices.each do |v|
+      p = v.project(640, 480, 256, @distance)
+      t << p
     end
-    @image.draw(0, 0, 1)
+    avg_z = []
+    @faces.each_with_index do |f,i|
+      if [t[f[0]], t[f[1]], t[f[2]], t[f[3]]].include? nil
+       next
+      end
+      z = (t[f[0]].z + t[f[1]].z + t[f[2]].z + t[f[3]].z) / 4.0
+      avg_z << [i,z]
+    end
+    avg_z.sort! { |x,y| y[1] <=> x[1] }
+    
+    #WIREFRAME
+  #  @faces.each do |f|
+  #    if [t[f[0]], t[f[1]], t[f[2]], t[f[3]]].include? nil
+  #      next
+  #    end
+  #    @image.paint {
+  #      line t[f[0]].x, t[f[0]].y, t[f[1]].x, t[f[1]].y
+  #      line t[f[1]].x, t[f[1]].y, t[f[2]].x, t[f[2]].y
+  #      line t[f[2]].x, t[f[2]].y, t[f[3]].x, t[f[3]].y
+  #      line t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y
+  #    }
+      
+  #    end
+  avg_z.each do |tmp|
+    
+    face_index = tmp[0]
+    f = @faces[face_index]
+        if [t[f[0]], t[f[1]], t[f[2]], t[f[3]]].include? nil
+         next
+        end
+    center_x = (t[f[0]].x + t[f[1]].x + t[f[2]].x + t[f[3]].x)/4.0
+    center_y = (t[f[0]].y + t[f[1]].y + t[f[2]].y + t[f[3]].y)/4.0
+    @image.paint {
+    polyline [t[f[0]].x, t[f[0]].y, t[f[1]].x, t[f[1]].y,
+           t[f[1]].x, t[f[1]].y, t[f[2]].x, t[f[2]].y,
+           t[f[2]].x, t[f[2]].y, t[f[3]].x, t[f[3]].y,
+           t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y], :closed => true    }
   end
-end
+      @image.draw(0, 0, 1)
+    end
+  end
 
 window = GameWindow.new
 window.show
