@@ -109,7 +109,7 @@ class GameWindow < Gosu::Window
       [32, 33, 34, 35], [36, 39, 38, 37], [32, 36, 37, 33], [33, 37, 38, 34], [34, 38, 39, 35], [36, 32, 35, 39]
       ]
     @distance = -10
-   #@colors = [[255,0,255],(255,0,0),(0,255,0),(0,0,255),(0,255,255),(255,255,0)]
+   @colors = [:red, :green, :blue, :yellow, :white, :black, :orange]
   end
 
   def update
@@ -195,34 +195,25 @@ class GameWindow < Gosu::Window
       avg_z << [i,z]
     end
     avg_z.sort! { |x,y| y[1] <=> x[1] }
-    
-    #WIREFRAME
-  #  @faces.each do |f|
-  #    if [t[f[0]], t[f[1]], t[f[2]], t[f[3]]].include? nil
-  #      next
-  #    end
-  #    @image.paint {
-  #      line t[f[0]].x, t[f[0]].y, t[f[1]].x, t[f[1]].y
-  #      line t[f[1]].x, t[f[1]].y, t[f[2]].x, t[f[2]].y
-  #      line t[f[2]].x, t[f[2]].y, t[f[3]].x, t[f[3]].y
-  #      line t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y
-  #    }
-      
-  #    end
-  avg_z.each do |tmp|
-    
+
+  
+  avg_z.each do |tmp|  
     face_index = tmp[0]
     f = @faces[face_index]
         if [t[f[0]], t[f[1]], t[f[2]], t[f[3]]].include? nil
          next
         end
-    center_x = (t[f[0]].x + t[f[1]].x + t[f[2]].x + t[f[3]].x)/4.0
-    center_y = (t[f[0]].y + t[f[1]].y + t[f[2]].y + t[f[3]].y)/4.0
+    center_x = (t[f[0]].x + t[f[1]].x + t[f[2]].x + t[f[3]].x)/4
+    center_y = (t[f[0]].y + t[f[1]].y + t[f[2]].y + t[f[3]].y)/4
     @image.paint {
     polyline [t[f[0]].x, t[f[0]].y, t[f[1]].x, t[f[1]].y,
            t[f[1]].x, t[f[1]].y, t[f[2]].x, t[f[2]].y,
            t[f[2]].x, t[f[2]].y, t[f[3]].x, t[f[3]].y,
-           t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y], :closed => true    }
+           t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y], :closed => true, :color => :white, :fill => true
+           if ARGV.include? "disco"
+                 fill center_x, center_y, :color => @colors.sample #PANIC AT THE DISCO!
+           end
+    }
   end
       @image.draw(0, 0, 1)
     end
