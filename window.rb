@@ -50,7 +50,7 @@ end
 class GameWindow < Gosu::Window
   def initialize
     super 640, 480, false
-    self.caption = "Ruby boxes"
+    self.caption = "Projekt 2 - grafika, Piotr Szmielew"
     @image = TexPlay.create_image(self, 640, 480, :color => Gosu::Color::BLUE) 
     @vertices =
     [
@@ -191,7 +191,7 @@ class GameWindow < Gosu::Window
       if [t[f[0]], t[f[1]], t[f[2]], t[f[3]]].include? nil
        next
       end
-      z = (t[f[0]].z + t[f[1]].z + t[f[2]].z + t[f[3]].z) / 4.0
+      z = (@vertices[f[0]].z + @vertices[f[1]].z + @vertices[f[2]].z + @vertices[f[3]].z) / 4.0
       avg_z << [i,z]
     end
     avg_z.sort! { |x,y| y[1] <=> x[1] }
@@ -208,7 +208,7 @@ class GameWindow < Gosu::Window
     #      line t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y
     #    }    
     #    end
-  
+
   avg_z.each do |tmp|  
     face_index = tmp[0]
     f = @faces[face_index]
@@ -221,7 +221,7 @@ class GameWindow < Gosu::Window
     polyline [t[f[0]].x, t[f[0]].y, t[f[1]].x, t[f[1]].y,
            t[f[1]].x, t[f[1]].y, t[f[2]].x, t[f[2]].y,
            t[f[2]].x, t[f[2]].y, t[f[3]].x, t[f[3]].y,
-           t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y], :closed => true, :color => :white, :fill => true
+           t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y], :closed => true, :color => :white
            if ARGV.include? "disco"
                  fill center_x, center_y, :color => @colors.sample #PANIC AT THE DISCO!
            elsif ARGV.include? "color"
