@@ -50,11 +50,11 @@ end
 class GameWindow < Gosu::Window
   def initialize
     super 640, 480, false
-    self.caption = "Projekt Grafika 2"
+    self.caption = "Ruby boxes"
     @image = TexPlay.create_image(self, 640, 480, :color => Gosu::Color::BLUE) 
     @vertices =
     [
-      #pierwsza kostka
+      #first cube
                 Point3d.new(11.987708,-1.000000,1.000000),
                 Point3d.new(11.987708,-1.000000,3.000000),
                 Point3d.new(9.243792,-1.000000,3.000000),
@@ -63,7 +63,7 @@ class GameWindow < Gosu::Window
                 Point3d.new(11.987707,1.000000,3.000000),
                 Point3d.new(9.243792,1.000000,3.000000),
                 Point3d.new(9.243793,1.000000,1.000000),
-      #druga kostka
+      #second cube
                 Point3d.new(-2.956952,-0.000000,-7.195473),
                 Point3d.new(-2.956952,-0.000000,-5.195473),
                 Point3d.new(3.043049,-0.000000,-5.195473), 
@@ -72,7 +72,7 @@ class GameWindow < Gosu::Window
                 Point3d.new(-2.956950,2.000000,-5.195473), 
                 Point3d.new(3.043049,2.000000,-5.195474),
                 Point3d.new(3.043048,2.000000,-7.195473),
-        #trzecia kostka
+        #third cube
                 Point3d.new(4.600000,-1.600000,3.400000),
                 Point3d.new(4.600000,-1.600000,6.600000),
                 Point3d.new(1.400000,-1.600000,6.600000),
@@ -81,7 +81,7 @@ class GameWindow < Gosu::Window
                 Point3d.new(4.599999,1.600000,6.600001),
                 Point3d.new(1.399999,1.600000,6.599999),
                 Point3d.new(1.400000,1.600000,3.400000),
-          #czwarta kostka
+          #fourth cube
               Point3d.new(7.987709,-1.000000,-5.000000),
               Point3d.new(7.987709,-1.000000,-3.000000),
               Point3d.new(5.243792,-1.000000,-3.000000),
@@ -90,7 +90,7 @@ class GameWindow < Gosu::Window
               Point3d.new(7.987708,1.000000,-3.000000),
               Point3d.new(5.243792,1.000000,-3.000000),
               Point3d.new(5.243793,1.000000,-5.000000),
-          #piąta kostka
+          #fifth cube
               Point3d.new(-3.000000,-1.000000,-1.000000),
               Point3d.new(-3.000000,-1.000000,1.000000),
               Point3d.new(3.000000,-1.000000,1.000000),
@@ -196,6 +196,18 @@ class GameWindow < Gosu::Window
     end
     avg_z.sort! { |x,y| y[1] <=> x[1] }
 
+      #If you need drawing using only lines - uncomment this.
+    #  @faces.each do |f|
+    #    if [t[f[0]], t[f[1]], t[f[2]], t[f[3]]].include? nil
+    #      next
+    #    end
+    #    @image.paint {
+    #      line t[f[0]].x, t[f[0]].y, t[f[1]].x, t[f[1]].y
+    #      line t[f[1]].x, t[f[1]].y, t[f[2]].x, t[f[2]].y
+    #      line t[f[2]].x, t[f[2]].y, t[f[3]].x, t[f[3]].y
+    #      line t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y
+    #    }    
+    #    end
   
   avg_z.each do |tmp|  
     face_index = tmp[0]
@@ -212,6 +224,9 @@ class GameWindow < Gosu::Window
            t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y], :closed => true, :color => :white, :fill => true
            if ARGV.include? "disco"
                  fill center_x, center_y, :color => @colors.sample #PANIC AT THE DISCO!
+           elsif ARGV.include? "color"
+                fill center_x, center_y, :color => :red
+           else
            end
     }
   end

@@ -3,4 +3,9 @@ Simple 3d drawing piece of code. Written in Ruby using Gosu, Texplay and Active 
 Very much of the code is taken from:
 http://codentronix.com/2011/04/21/rotating-3d-wireframe-cube-with-python/
 
+Commandline options:
+disco - disco mode
+color - fill faces
+none - wireframe mode
+
 Maybe someone will make some use of it :)
