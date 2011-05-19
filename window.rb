@@ -219,9 +219,14 @@ class GameWindow < Gosu::Window
            t[f[1]].x, t[f[1]].y, t[f[2]].x, t[f[2]].y,
            t[f[2]].x, t[f[2]].y, t[f[3]].x, t[f[3]].y,
            t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y], :closed => true, :color => :red
-           if ARGV.include? "disco"
-                 fill center_x, center_y, :color => @colors.sample #PANIC AT THE DISCO!
-           elsif ARGV.include? "color"
+      #     if ARGV.include? "disco"
+      #            sample = @colors.sample
+      #           fill center_x, center_y, :color => sample #PANIC AT THE DISCO!
+      #           fill (t[f[2]].x - t[f[0]].x)*1/8 + t[f[0]].x, (t[f[2]].y - t[f[0]].y)*1/8 + t[f[0]].y, :color => sample
+      #           fill (t[f[3]].x - t[f[1]].x)*1/8 + t[f[1]].x, (t[f[3]].y - t[f[1]].y)*1/8 + t[f[1]].y, :color => sample
+      #           fill (t[f[2]].x - t[f[0]].x)*7/8 + t[f[0]].x, (t[f[2]].y - t[f[0]].y)*7/8 + t[f[0]].y, :color => sample
+      #           fill (t[f[3]].x - t[f[1]].x)*7/8 + t[f[1]].x, (t[f[3]].y - t[f[1]].y)*7/8 + t[f[1]].y, :color => sample
+           if ARGV.include? "color"
                 fill center_x, center_y, :color => :red
                 fill (t[f[2]].x - t[f[0]].x)*1/8 + t[f[0]].x, (t[f[2]].y - t[f[0]].y)*1/8 + t[f[0]].y, :color => :red
                 fill (t[f[3]].x - t[f[1]].x)*1/8 + t[f[1]].x, (t[f[3]].y - t[f[1]].y)*1/8 + t[f[1]].y, :color => :red
