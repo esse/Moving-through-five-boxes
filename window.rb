@@ -115,53 +115,53 @@ class GameWindow < Gosu::Window
   def update
     if button_down? Gosu::KbE then
       @vertices = @vertices.map do |v|
-        v.rotateX(1)
+        v.rotateX(2)
       end
     end
     if button_down? Gosu::KbD then
       @vertices = @vertices.map do |v|
-        v.rotateX(-1)
+        v.rotateX(-2)
       end
     end
     if button_down? Gosu::KbQ then
       @vertices = @vertices.map do |v|
-        v.rotateY(1)
+        v.rotateY(2)
       end
     end
     if button_down? Gosu::KbW then
       @vertices = @vertices.map do |v|
-        v.rotateY(-1)
+        v.rotateY(-2)
       end
     end 
     if button_down? Gosu::KbC then
       @vertices = @vertices.map do |v|
-        v.rotateZ(1)
+        v.rotateZ(2)
       end
     end
     if button_down? Gosu::KbV then
       @vertices = @vertices.map do |v|
-        v.rotateZ(-1)
+        v.rotateZ(-2)
       end
     end
     if button_down? Gosu::KbUp then
       @vertices = @vertices.map do |v|
-          Point3d.new(v.x, v.y, v.z+0.1)
+          Point3d.new(v.x, v.y, v.z+0.2)
       end
     end
     if button_down? Gosu::KbDown then
       @vertices = @vertices.map do |v|
-        Point3d.new(v.x, v.y, v.z-0.1)
+        Point3d.new(v.x, v.y, v.z-0.2)
       end
 
     end
     if button_down? Gosu::KbLeft then
       @vertices = @vertices.map do |v|
-        Point3d.new(v.x - 0.1, v.y, v.z)
+        Point3d.new(v.x - 0.2, v.y, v.z)
       end
     end
     if button_down? Gosu::KbRight then
       @vertices = @vertices.map do |v|
-        Point3d.new(v.x + 0.1, v.y, v.z)
+        Point3d.new(v.x + 0.2, v.y, v.z)
       end
     end
     if button_down? Gosu::KbO then
@@ -183,8 +183,7 @@ class GameWindow < Gosu::Window
     @image = TexPlay.create_image(self, 640, 480, :color => Gosu::Color::BLUE) 
     t = []
     @vertices.each do |v|
-      p = v.project(640, 480, 256, @distance)
-      t << p
+      t << v.project(640, 480, 256, @distance)
     end
     avg_z = []
     @faces.each_with_index do |f,i|
@@ -195,7 +194,6 @@ class GameWindow < Gosu::Window
       avg_z << [i,z]
     end
     avg_z.sort! { |x,y| y[1] <=> x[1] }
-
       #If you need drawing using only lines - uncomment this.
     #  @faces.each do |f|
     #    if [t[f[0]], t[f[1]], t[f[2]], t[f[3]]].include? nil
@@ -208,24 +206,31 @@ class GameWindow < Gosu::Window
     #      line t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y
     #    }    
     #    end
-
+    #images = []
   avg_z.each do |tmp|  
     face_index = tmp[0]
     f = @faces[face_index]
-        if [t[f[0]], t[f[1]], t[f[2]], t[f[3]]].include? nil
-         next
-        end
-    center_x = (t[f[0]].x + t[f[1]].x + t[f[2]].x + t[f[3]].x)/4
-    center_y = (t[f[0]].y + t[f[1]].y + t[f[2]].y + t[f[3]].y)/4
+    center_x = (t[f[0]].x + t[f[1]].x + t[f[2]].x + t[f[3]].x)/4.0
+    center_y = (t[f[0]].y + t[f[1]].y + t[f[2]].y + t[f[3]].y)/4.0
+    p center_x
+    p center_y
     @image.paint {
     polyline [t[f[0]].x, t[f[0]].y, t[f[1]].x, t[f[1]].y,
            t[f[1]].x, t[f[1]].y, t[f[2]].x, t[f[2]].y,
            t[f[2]].x, t[f[2]].y, t[f[3]].x, t[f[3]].y,
-           t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y], :closed => true, :color => :white
+           t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y], :closed => true, :color => :red
            if ARGV.include? "disco"
                  fill center_x, center_y, :color => @colors.sample #PANIC AT THE DISCO!
            elsif ARGV.include? "color"
                 fill center_x, center_y, :color => :red
+                fill (t[f[2]].x - t[f[0]].x)*1/8 + t[f[0]].x, (t[f[2]].y - t[f[0]].y)*1/8 + t[f[0]].y, :color => :red
+                fill (t[f[3]].x - t[f[1]].x)*1/8 + t[f[1]].x, (t[f[3]].y - t[f[1]].y)*1/8 + t[f[1]].y, :color => :red
+                fill (t[f[2]].x - t[f[0]].x)*7/8 + t[f[0]].x, (t[f[2]].y - t[f[0]].y)*7/8 + t[f[0]].y, :color => :red
+                fill (t[f[3]].x - t[f[1]].x)*7/8 + t[f[1]].x, (t[f[3]].y - t[f[1]].y)*7/8 + t[f[1]].y, :color => :red
+        #        (1..10).to_a.each do |n|
+        #          fill t[f[0]].x + (10/n)*t[f[2]].x, t[f[0]].y + (10/n)*t[f[2]].y, :color => :red
+        #          
+         #       end
            else
            end
     }
