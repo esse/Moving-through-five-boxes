@@ -51,7 +51,8 @@ class GameWindow < Gosu::Window
   def initialize
     super 640, 480, false
     self.caption = "Projekt 2 - grafika, Piotr Szmielew"
-    @image = TexPlay.create_image(self, 640, 480, :color => Gosu::Color::BLUE) 
+    @image = TexPlay.create_image(self, 640, 480, :color => Gosu::Color::BLUE)
+    @texture = Gosu::Image.new(self, 'adama.jpg') 
     @vertices =
     [
       #first cube
@@ -219,11 +220,11 @@ class GameWindow < Gosu::Window
     polyline [t[f[0]].x, t[f[0]].y, t[f[1]].x, t[f[1]].y,
            t[f[1]].x, t[f[1]].y, t[f[2]].x, t[f[2]].y,
            t[f[2]].x, t[f[2]].y, t[f[3]].x, t[f[3]].y,
-           t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y], :closed => true, :color => :red
+           t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y], :closed => true, :texture => @texture
            if ARGV.include? "disco"
                  fill center_x, center_y, :color => @colors.sample #PANIC AT THE DISCO!
            elsif ARGV.include? "color"
-                fill center_x, center_y, :color => :red
+                fill center_x, center_y, :texture => @texture
          #       fill (t[f[2]].x - t[f[0]].x)*1/8 + t[f[0]].x, (t[f[2]].y - t[f[0]].y)*1/8 + t[f[0]].y, :color => :red
         #        fill (t[f[3]].x - t[f[1]].x)*1/8 + t[f[1]].x, (t[f[3]].y - t[f[1]].y)*1/8 + t[f[1]].y, :color => :red
         #        fill (t[f[2]].x - t[f[0]].x)*7/8 + t[f[0]].x, (t[f[2]].y - t[f[0]].y)*7/8 + t[f[0]].y, :color => :red
