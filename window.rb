@@ -212,8 +212,6 @@ class GameWindow < Gosu::Window
     f = @faces[face_index]
     center_x = (t[f[0]].x + t[f[1]].x + t[f[2]].x + t[f[3]].x)/4.0
     center_y = (t[f[0]].y + t[f[1]].y + t[f[2]].y + t[f[3]].y)/4.0
-    p center_x
-    p center_y
     @image.paint {
     polyline [t[f[0]].x, t[f[0]].y, t[f[1]].x, t[f[1]].y,
            t[f[1]].x, t[f[1]].y, t[f[2]].x, t[f[2]].y,
