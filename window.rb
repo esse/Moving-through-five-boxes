@@ -50,7 +50,7 @@ end
 class GameWindow < Gosu::Window
   def initialize
     super 640, 480, false
-    self.caption = "Projekt 2 - grafika, Piotr Szmielew"
+    self.caption = "Ruby Gosu Graphics"
     @image = TexPlay.create_image(self, 640, 480, :color => Gosu::Color::BLUE) 
     @vertices =
     [
@@ -194,19 +194,6 @@ class GameWindow < Gosu::Window
       avg_z << [i,z]
     end
     avg_z.sort! { |x,y| y[1] <=> x[1] }
-      #If you need drawing using only lines - uncomment this.
-    #  @faces.each do |f|
-    #    if [t[f[0]], t[f[1]], t[f[2]], t[f[3]]].include? nil
-    #      next
-    #    end
-    #    @image.paint {
-    #      line t[f[0]].x, t[f[0]].y, t[f[1]].x, t[f[1]].y
-    #      line t[f[1]].x, t[f[1]].y, t[f[2]].x, t[f[2]].y
-    #      line t[f[2]].x, t[f[2]].y, t[f[3]].x, t[f[3]].y
-    #      line t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y
-    #    }    
-    #    end
-    #images = []
   avg_z.each do |tmp|  
     face_index = tmp[0]
     f = @faces[face_index]
@@ -217,13 +204,6 @@ class GameWindow < Gosu::Window
            t[f[1]].x, t[f[1]].y, t[f[2]].x, t[f[2]].y,
            t[f[2]].x, t[f[2]].y, t[f[3]].x, t[f[3]].y,
            t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y], :closed => true, :color => :red
-      #     if ARGV.include? "disco"
-      #            sample = @colors.sample
-      #           fill center_x, center_y, :color => sample #PANIC AT THE DISCO!
-      #           fill (t[f[2]].x - t[f[0]].x)*1/8 + t[f[0]].x, (t[f[2]].y - t[f[0]].y)*1/8 + t[f[0]].y, :color => sample
-      #           fill (t[f[3]].x - t[f[1]].x)*1/8 + t[f[1]].x, (t[f[3]].y - t[f[1]].y)*1/8 + t[f[1]].y, :color => sample
-      #           fill (t[f[2]].x - t[f[0]].x)*7/8 + t[f[0]].x, (t[f[2]].y - t[f[0]].y)*7/8 + t[f[0]].y, :color => sample
-      #           fill (t[f[3]].x - t[f[1]].x)*7/8 + t[f[1]].x, (t[f[3]].y - t[f[1]].y)*7/8 + t[f[1]].y, :color => sample
            if ARGV.include? "color"
                 fill center_x, center_y, :color => :red
                 fill (t[f[2]].x - t[f[0]].x)*1/8 + t[f[0]].x, (t[f[2]].y - t[f[0]].y)*1/8 + t[f[0]].y, :color => :red
