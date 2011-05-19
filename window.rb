@@ -206,15 +206,16 @@ class GameWindow < Gosu::Window
     #      line t[f[3]].x, t[f[3]].y, t[f[0]].x, t[f[0]].y
     #    }    
     #    end
-    #images = []
-  avg_z.each do |tmp|  
+    images = []
+  avg_z.each do |tmp|
+    image = TexPlay.create_image(self, 640, 480, :color => Gosu::Color::BLUE)
+    image.clear  :dest_select => Gosu::Color::BLUE
+    
     face_index = tmp[0]
     f = @faces[face_index]
     center_x = (t[f[0]].x + t[f[1]].x + t[f[2]].x + t[f[3]].x)/4.0
     center_y = (t[f[0]].y + t[f[1]].y + t[f[2]].y + t[f[3]].y)/4.0
-    p center_x
-    p center_y
-    @image.paint {
+    image.paint {
     polyline [t[f[0]].x, t[f[0]].y, t[f[1]].x, t[f[1]].y,
            t[f[1]].x, t[f[1]].y, t[f[2]].x, t[f[2]].y,
            t[f[2]].x, t[f[2]].y, t[f[3]].x, t[f[3]].y,
@@ -223,10 +224,10 @@ class GameWindow < Gosu::Window
                  fill center_x, center_y, :color => @colors.sample #PANIC AT THE DISCO!
            elsif ARGV.include? "color"
                 fill center_x, center_y, :color => :red
-                fill (t[f[2]].x - t[f[0]].x)*1/8 + t[f[0]].x, (t[f[2]].y - t[f[0]].y)*1/8 + t[f[0]].y, :color => :red
-                fill (t[f[3]].x - t[f[1]].x)*1/8 + t[f[1]].x, (t[f[3]].y - t[f[1]].y)*1/8 + t[f[1]].y, :color => :red
-                fill (t[f[2]].x - t[f[0]].x)*7/8 + t[f[0]].x, (t[f[2]].y - t[f[0]].y)*7/8 + t[f[0]].y, :color => :red
-                fill (t[f[3]].x - t[f[1]].x)*7/8 + t[f[1]].x, (t[f[3]].y - t[f[1]].y)*7/8 + t[f[1]].y, :color => :red
+         #       fill (t[f[2]].x - t[f[0]].x)*1/8 + t[f[0]].x, (t[f[2]].y - t[f[0]].y)*1/8 + t[f[0]].y, :color => :red
+        #        fill (t[f[3]].x - t[f[1]].x)*1/8 + t[f[1]].x, (t[f[3]].y - t[f[1]].y)*1/8 + t[f[1]].y, :color => :red
+        #        fill (t[f[2]].x - t[f[0]].x)*7/8 + t[f[0]].x, (t[f[2]].y - t[f[0]].y)*7/8 + t[f[0]].y, :color => :red
+        #        fill (t[f[3]].x - t[f[1]].x)*7/8 + t[f[1]].x, (t[f[3]].y - t[f[1]].y)*7/8 + t[f[1]].y, :color => :red
         #        (1..10).to_a.each do |n|
         #          fill t[f[0]].x + (10/n)*t[f[2]].x, t[f[0]].y + (10/n)*t[f[2]].y, :color => :red
         #          
@@ -234,8 +235,13 @@ class GameWindow < Gosu::Window
            else
            end
     }
+    images << {:z => tmp[1], :img => image}
   end
-      @image.draw(0, 0, 1)
+   #   images.sort { |x,y| y[:z] <=> x[:z] }
+      images.each do |img|
+        img[:img].draw(0,0,1)
+      end
+    #  @image.draw(0, 0, 1)
     end
   end
 
