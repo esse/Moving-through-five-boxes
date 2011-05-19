@@ -11,4 +11,6 @@ Keys:
 arrows - moving
 q, w, e, d, c, v - rotations
 
+This version draw every wall on another image - this is very slow though :(
+
 Maybe someone will make some use of it :)
