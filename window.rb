@@ -17,7 +17,7 @@ class Point3d
       sina = Math::sin(rad)
       y = @y * cosa - @z * sina
       z = @y * sina + @z * cosa
-      Point3d.new(x, y, z)
+      Point3d.new(@x, y, z)
     end
 
     def rotateY(angle)
@@ -230,10 +230,6 @@ class GameWindow < Gosu::Window
                 fill (t[f[3]].x - t[f[1]].x)*1/8 + t[f[1]].x, (t[f[3]].y - t[f[1]].y)*1/8 + t[f[1]].y, :color => :red
                 fill (t[f[2]].x - t[f[0]].x)*7/8 + t[f[0]].x, (t[f[2]].y - t[f[0]].y)*7/8 + t[f[0]].y, :color => :red
                 fill (t[f[3]].x - t[f[1]].x)*7/8 + t[f[1]].x, (t[f[3]].y - t[f[1]].y)*7/8 + t[f[1]].y, :color => :red
-        #        (1..10).to_a.each do |n|
-        #          fill t[f[0]].x + (10/n)*t[f[2]].x, t[f[0]].y + (10/n)*t[f[2]].y, :color => :red
-        #          
-         #       end
            else
            end
     }
