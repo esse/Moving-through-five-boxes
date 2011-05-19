@@ -17,7 +17,7 @@ class Point3d
       sina = Math::sin(rad)
       y = @y * cosa - @z * sina
       z = @y * sina + @z * cosa
-      Point3d.new(x, y, z)
+      Point3d.new(@x, y, z)
     end
 
     def rotateY(angle)
